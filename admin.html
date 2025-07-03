@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Attendance Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #eef2f7;
+    }
+    h1 {
+      text-align: center;
+      color: #004080;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #004080;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    input[type="date"] {
+      padding: 8px;
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    .profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #004080;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.profile-info span {
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+#signOutBtn {
+  padding: 6px 12px;
+  background-color: #c00;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#signOutBtn:hover {
+  background-color: #a00;
+}
+
+  </style>
+</head>
+<body>
+  <header class="profile-header">
+  <div class="profile-info">
+    <span id="userName"></span>
+    <span id="userRole"></span>
+  </div>
+  <button id="signOutBtn">Sign Out</button>
+</header>
+
+  <h1>Admin Dashboard</h1>
+
+  <section>
+    <h2>All Batches Overview</h2>
+    <table id="batchTable">
+      <thead>
+        <tr>
+          <th>Batch</th>
+          <th>Batch Owner</th>
+          <th>Total Students</th>
+          <th>Average Attendance %</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>All Students</h2>
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Batch</th>
+          <th>Attendance %</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Attendance Log by Date</h2>
+    <input type="date" id="logDate">
+    <table id="attendanceLogTable">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Batch</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script>
+    const API = "http://localhost:3000";
+
+    async function fetchData() {
+      const [usersRes, studentsRes, attendanceRes] = await Promise.all([
+        fetch(`${API}/users?role=batchOwner`),
+        fetch(`${API}/students`),
+        fetch(`${API}/attendance`)
+      ]);
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user) {
+  window.location.href = "login.html";
+}
+
+document.getElementById("userName").textContent = `👤 ${user.name}`;
+document.getElementById("userRole").textContent = `(${user.role})`;
+
+document.getElementById("signOutBtn").addEventListener("click", () => {
+  if (confirm("Are you sure you want to sign out?")) {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  }
+});
+
+      const owners = await usersRes.json();
+      const students = await studentsRes.json();
+      const attendance = await attendanceRes.json();
+
+      loadBatchTable(owners, students, attendance);
+      loadStudentsTable(students, attendance);
+
+      document.getElementById("logDate").addEventListener("change", (e) => {
+        const selectedDate = e.target.value;
+        const logs = attendance.filter(a => a.date === selectedDate);
+        renderAttendanceLog(logs);
+      });
+    }
+
+    function loadBatchTable(owners, students, attendance) {
+      const batchMap = {};
+
+      owners.forEach(owner => {
+        const batch = owner.batch;
+        const batchStudents = students.filter(s => s.batch === batch);
+        const total = batchStudents.length;
+
+        const batchAttendance = attendance.filter(a => a.batch === batch);
+        let totalEntries = 0;
+        let totalPresent = 0;
+
+        batchAttendance.forEach(record => {
+          record.students.forEach(s => {
+            if (s.status === "Present") totalPresent++;
+            totalEntries++;
+          });
+        });
+
+        const percent = totalEntries ? ((totalPresent / totalEntries) * 100).toFixed(1) : "-";
+
+        batchMap[batch] = {
+          owner: owner.name,
+          count: total,
+          percent
+        };
+      });
+
+      const tbody = document.querySelector("#batchTable tbody");
+      tbody.innerHTML = "";
+      Object.entries(batchMap).forEach(([batch, data]) => {
+        const row = `<tr>
+          <td>${batch}</td>
+          <td>${data.owner}</td>
+          <td>${data.count}</td>
+          <td>${data.percent}%</td>
+        </tr>`;
+        tbody.innerHTML += row;
+        
+      });
+    }
+
+    function loadStudentsTable(students, attendance) {
+      const tbody = document.querySelector("#studentsTable tbody");
+      tbody.innerHTML = "";
+
+      students.forEach(student => {
+        const totalDays = attendance.filter(a => a.students.find(s => s.name === student.name)).length;
+        const presentDays = attendance.filter(a => {
+          const record = a.students.find(s => s.name === student.name);
+          return record?.status === "Present";
+        }).length;
+
+        const percent = totalDays ? ((presentDays / totalDays) * 100).toFixed(1) : "-";
+
+        const row = `<tr>
+          <td>${student.id}</td>
+          <td>${student.name}</td>
+          <td>${student.batch}</td>
+          <td>${percent}%</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function renderAttendanceLog(logs) {
+      const tbody = document.querySelector("#attendanceLogTable tbody");
+      tbody.innerHTML = "";
+
+      if (logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">No records for selected date</td></tr>`;
+        return;
+      }
+
+      logs.forEach(record => {
+        record.students.forEach(s => {
+          const row = `<tr>
+            <td>${s.name}</td>
+            <td>${record.batch}</td>
+            <td>${s.status}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      });
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>

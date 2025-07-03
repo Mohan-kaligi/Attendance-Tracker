@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batch Dashboard</title>
+    <link rel="stylesheet" href="batch.css" />
+</head>
+<body>
+  <header class="profile-header">
+    <div class="profile-info">
+      <span id="userName"></span>
+      <span id="userRole"></span>
+    </div>
+    <button id="signOutBtn">Sign Out</button>
+  </header>
+
+
+  <h1>Batch Owner Dashboard</h1>
+  <h2>Batch: <span id="batchName"></span></h2>
+  <p><strong>Today's Date:</strong> <span id="todayDate"></span></p>
+
+  <form id="addStudentForm">
+    <h3>Add New Student</h3>
+    <input type="text" id="studentId" placeholder="Student ID" required />
+    <input type="text" id="studentName" placeholder="Student Name" required />
+    <button type="submit">Add Student</button>
+  </form>
+  <form id="attendanceForm">
+    <table>
+      <thead>
+  <tr>
+    <th>Student ID</th>
+    <th>Name</th>
+    <th>Status</th>
+    <th>Attendance %</th>
+    <th>Last 3 Days</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
+      <tbody id="studentTable">
+      </tbody>
+    </table>
+    <button type="submit">Submit Attendance</button>
+  </form>
+<script src="batch.js"></script>
+
+  <footer>
+    <p>&copy; 2025 Online Attendance Tracker. All rights reserved.</p>
+  </footer>
+  <script>
+    document.getElementById('batchName').textContent = batch; 
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@gmail.com",
+      "name": "Gradious Technologies",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Sivamani",
+      "email": "sivamani@gmail.com",
+      "password": "batch1pass",
+      "role": "batchOwner",
+      "batch": "Batch A"
+    },
+    {
+      "id": "3",
+      "name": "Upendra",
+      "email": "upendra@gmail.com",
+      "password": "batch2pass",
+      "role": "batchOwner",
+      "batch": "Batch B"
+    },
+    {
+      "id": "4",
+      "name": "Srinivas",
+      "email": "srinivas@gmail.com",
+      "password": "batch3pass",
+      "role": "batchOwner",
+      "batch": "Batch C"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "e5dd",
+      "batch": "Batch B",
+      "date": "2025-06-29",
+      "students": [
+        {
+          "name": "Babulu",
+          "status": "Present"
+        },
+        {
+          "name": "Bany",
+          "status": "Present"
+        },
+        {
+          "name": "Sai",
+          "status": "Present"
+        }
+      ]
+    },
+    {
+      "id": "db8a",
+      "batch": "Batch A",
+      "date": "2025-06-29",
+      "students": [
+        {
+          "name": "Mohan",
+          "status": "Present"
+        },
+        {
+          "name": "Bunny",
+          "status": "Absent"
+        },
+        {
+          "name": "Somesh",
+          "status": "Present"
+        }
+      ]
+    },
+    {
+      "id": "ae06",
+      "batch": "Batch C",
+      "date": "2025-06-29",
+      "students": [
+        {
+          "name": "Ganesh",
+          "status": "Present"
+        },
+        {
+          "name": "Suresh",
+          "status": "Absent"
+        },
+        {
+          "name": "Hanuman",
+          "status": "Present"
+        }
+      ]
+    }
+  ],
+  "students": [
+    {
+      "id": "1",
+      "owner": "Sivamani",
+      "name": "Mohan",
+      "batch": "Batch A"
+    },
+    {
+      "id": "2",
+      "ownner": "Sivamani",
+      "name": "Bunny",
+      "batch": "Batch A"
+    },
+    {
+      "id": "3",
+      "ownner": "Sivamani",
+      "name": "Somesh",
+      "batch": "Batch A"
+    },
+    {
+      "id": "4",
+      "ownner": "Upendra",
+      "name": "Babulu",
+      "batch": "Batch B"
+    },
+    {
+      "id": "5",
+      "ownner": "Upendra",
+      "name": "Bany",
+      "batch": "Batch B"
+    },
+    {
+      "id": "6",
+      "ownner": "Upendra",
+      "name": "Sai",
+      "batch": "Batch B"
+    },
+    {
+      "id": "7",
+      "ownner": "Srinivas",
+      "name": "Ganesh",
+      "batch": "Batch C"
+    },
+    {
+      "id": "8",
+      "ownner": "Srinivas",
+      "name": "Suresh",
+      "batch": "Batch C"
+    },
+    {
+      "id": "9",
+      "name": "Hanuman",
+      "batch": "Batch C"
+    }
+  ]
+}

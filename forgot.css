@@ -1,0 +1,79 @@
+body{
+    background-color:white;
+    border-radius: 20px;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+header {
+      background-color: #004080;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+    }
+
+.head {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+.nav-buttons button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: #004080;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #dbe9ff;
+    }
+#forgotForm{
+    text-align: center;
+}
+.fotter
+{
+    background-color: #004080;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.contains
+{
+    background-color: aliceblue;
+    padding: 50px;
+    border-radius: 8px;
+    width: 350px;
+    height: 50vh;
+    margin: 50px auto;
+}
+#reset
+{
+    margin-left: 30px;
+    margin-top: 10px;
+    height: 50px;
+      padding: 20px;
+      background-color: #004080;;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+
+}
+#reset:hover {
+      background-color: green;
+    }
+.message{
+    color: red;
+    }
